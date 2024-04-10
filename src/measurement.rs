@@ -1,6 +1,6 @@
 use serde::{Serialize, Deserialize};
 use std::cmp::Ordering;
-use std::ops::{Add, Sub, Mul};
+use std::ops::{Add, Div, Mul, Sub};
 use std::fmt;
 
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq)]
@@ -167,6 +167,14 @@ impl Mul<f64> for Distance {
             self.value * multiplier,
             self.unit
         )
+    }
+}
+
+impl Div<f64> for Distance {
+    type Output = Self;
+
+    fn div(self, other: f64) -> Self::Output {
+        Self::from(self.value / other, self.unit)
     }
 }
 
