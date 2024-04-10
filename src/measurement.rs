@@ -1,7 +1,7 @@
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 use std::cmp::Ordering;
-use std::ops::{Add, Div, Mul, Sub};
 use std::fmt;
+use std::ops::{Add, Div, Mul, Sub};
 
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq)]
 pub enum DistanceUnit {
@@ -39,7 +39,8 @@ impl DistanceUnit {
             DistanceUnit::Feet => "ft",
             DistanceUnit::Yards => "yd",
             DistanceUnit::Miles => "mi",
-        }.into()
+        }
+        .into()
     }
 
     #[allow(dead_code)]
@@ -53,7 +54,8 @@ impl DistanceUnit {
             DistanceUnit::Feet => "feet",
             DistanceUnit::Yards => "yards",
             DistanceUnit::Miles => "miles",
-        }.into()
+        }
+        .into()
     }
 }
 
@@ -133,7 +135,8 @@ impl PartialEq for Distance {
 impl PartialOrd for Distance {
     #[inline]
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
-        self.in_unit(self.unit).partial_cmp(&other.in_unit(self.unit))
+        self.in_unit(self.unit)
+            .partial_cmp(&other.in_unit(self.unit))
     }
 }
 
@@ -141,10 +144,7 @@ impl Add for Distance {
     type Output = Self;
 
     fn add(self, other: Distance) -> Self {
-        Self::from(
-            self.value + other.in_unit(self.unit),
-            self.unit
-        )
+        Self::from(self.value + other.in_unit(self.unit), self.unit)
     }
 }
 
@@ -152,10 +152,15 @@ impl Sub for Distance {
     type Output = Self;
 
     fn sub(self, other: Self) -> Self {
-        Self::from(
-            self.value - other.in_unit(self.unit),
-            self.unit
-        )
+        Self::from(self.value - other.in_unit(self.unit), self.unit)
+    }
+}
+
+impl Div for Distance {
+    type Output = Self;
+
+    fn div(self, other: Self) -> Self::Output {
+        Self::from(self.value * other.in_unit(self.unit), self.unit)
     }
 }
 
@@ -163,18 +168,15 @@ impl Mul<f64> for Distance {
     type Output = Self;
 
     fn mul(self, multiplier: f64) -> Self {
-        Self::from(
-            self.value * multiplier,
-            self.unit
-        )
+        Self::from(self.value * multiplier, self.unit)
     }
 }
 
 impl Div<f64> for Distance {
     type Output = Self;
 
-    fn div(self, other: f64) -> Self::Output {
-        Self::from(self.value / other, self.unit)
+    fn div(self, divider: f64) -> Self::Output {
+        Self::from(self.value / divider, self.unit)
     }
 }
 
