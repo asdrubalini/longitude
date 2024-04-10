@@ -156,14 +156,6 @@ impl Sub for Distance {
     }
 }
 
-impl Div for Distance {
-    type Output = Self;
-
-    fn div(self, other: Self) -> Self::Output {
-        Self::from(self.value * other.in_unit(self.unit), self.unit)
-    }
-}
-
 impl Mul<f64> for Distance {
     type Output = Self;
 
@@ -177,6 +169,14 @@ impl Div<f64> for Distance {
 
     fn div(self, divider: f64) -> Self::Output {
         Self::from(self.value / divider, self.unit)
+    }
+}
+
+impl Div<Distance> for Distance {
+    type Output = f64;
+
+    fn div(self, rhs: Distance) -> Self::Output {
+        self.value / rhs.in_unit(self.unit)
     }
 }
 
